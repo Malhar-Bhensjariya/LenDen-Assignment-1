@@ -48,8 +48,8 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        response = jsonify({'message': 'User registered successfully'})
-        set_access_cookies(response, generate_token(user.id))
+        response = jsonify({'message': 'User registered successfully', 'token': generate_token(user.id)})
+        set_access_cookies(response, generate_token(user.id), domain='localhost')
         current_app.logger.info(f"User {user.id} registered successfully")
         return response, 201
     except Exception as e:
@@ -70,8 +70,8 @@ def login():
         if not user or not check_password_hash(user.password_hash, password):
             return jsonify({'error': 'Invalid credentials'}), 401
 
-        response = jsonify({'message': 'Login successful'})
-        set_access_cookies(response, generate_token(user.id))
+        response = jsonify({'message': 'Login successful', 'token': generate_token(user.id)})
+        set_access_cookies(response, generate_token(user.id), domain='localhost')
         current_app.logger.info(f"User {user.id} logged in")
         return response, 200
     except Exception as e:

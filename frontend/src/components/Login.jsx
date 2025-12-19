@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
 import { Eye, EyeOff } from 'lucide-react';
+import { useAuth } from './AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,11 +11,13 @@ const Login = () => {
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await login({ email, password });
+      authLogin(); // Set authenticated state
       setSuccess('Login successful! Redirecting to dashboard...');
       setTimeout(() => navigate('/dashboard'), 2000); // Redirect after 2 seconds
     } catch (err) {

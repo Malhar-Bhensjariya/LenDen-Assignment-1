@@ -13,6 +13,10 @@ def create_app():
 
     CORS(app, supports_credentials=True)  # Enable CORS with credentials support
 
+    # Configure JWT cookies for cross-origin (localhost ports)
+    app.config['JWT_ACCESS_COOKIE_SAMESITE'] = 'None'
+    app.config['JWT_ACCESS_COOKIE_SECURE'] = False  # Allow over HTTP in development
+
     db.init_app(app)
     jwt.init_app(app)
 

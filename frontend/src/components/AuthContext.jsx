@@ -10,26 +10,25 @@ export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await api.get('/api/auth/verify');
-        setIsAuth(true);
-      } catch {
-        setIsAuth(false);
-      } finally {
-        setAuthChecked(true);
-      }
-    };
-    checkAuth();
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsAuth(true);
+    }
+    setAuthChecked(true);
   }, []);
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     setIsAuth(false);
     window.location.href = '/login';
   };
 
+  const handleLogin = () => {
+    setIsAuth(true);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuth, authChecked, logout: handleLogout }}>
+    <AuthContext.Provider value={{ isAuth, authChecked, logout: handleLogout, login: handleLogin }}>
       {children}
     </AuthContext.Provider>
   );
